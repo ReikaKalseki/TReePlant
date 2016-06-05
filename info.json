@@ -1,0 +1,10 @@
+{
+  "name": "TreePlant",
+  "version": "0.0.1",
+  "title": "T-Re(e)plant",
+  "author": "Reika",
+  "contact": "",
+  "homepage": "",
+  "description": "Makes trees replantable from their stumps. Also makes trees repairable.",
+  "dependencies": ["base >= 0.12.0"]
+}
