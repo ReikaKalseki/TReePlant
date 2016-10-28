@@ -11,3 +11,9 @@ Config.longLifeStumps = true
 
 --Enable this to make the stumps mineable and drop their parent tree type, placeable anew. This is the core of the mod.
 Config.placeableTrees = true
+
+--Enable this to make stumps have bigger hitboxes to make mining them easier.
+Config.bigStumpHitbox = true
+
+--Enable this to make trees drop themselves as well as their wood.
+Config.treesDropSelves = false

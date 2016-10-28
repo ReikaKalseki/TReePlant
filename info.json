@@ -5,6 +5,7 @@
   "author": "Reika",
   "contact": "",
   "homepage": "",
+  "factorio_version" : "0.14",
   "description": "Makes trees replantable from their stumps. Also makes trees repairable.",
   "dependencies": ["base >= 0.12.0"]
 }
