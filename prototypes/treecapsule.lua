@@ -1,19 +1,6 @@
 require("functions")
 require("config")
 
-if Config.placeableTrees then
-	for k,v in pairs(data.raw["tree"]) do
-		local item = createTreeItem(k, v)
-		if item ~= nil then
-			data:extend(
-			{
-			  item
-			})
-		end
-	end
-end
-
---Tree healing capsules
 data:extend(
 {
     {

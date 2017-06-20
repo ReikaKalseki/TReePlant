@@ -20,7 +20,10 @@ for k,tree in pairs(data.raw["tree"]) do
 			table.insert(tree.flags,"placeable-player")
 		end
 		if Config.treesDropSelves and data.raw["corpse"][stumpname] ~= nil then
-			table.insert(tree.mineable.results, {name=stumpname})
+			tree.minable.results = {}
+			table.insert(tree.minable.results, {name=tree.minable.result, amount=tree.minable.count})
+			table.insert(tree.minable.results, {name=k, amount = 1})
+			tree.minable.result = nil
 		end
 		if Config.treeRepair then
 			--remove not-repairable flag, but that flag is not even present...
@@ -28,14 +31,18 @@ for k,tree in pairs(data.raw["tree"]) do
 		local stump = data.raw["corpse"][stumpname]
 		if stump ~= nil then
 			if Config.placeableTrees then
-				stump.selectable_in_game = true
-				stump.minable = {mining_particle = "wooden-particle", mining_time = 0.4, result = k, count = 1}
-				if Config.bigStumpHitbox then
-					stump.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}
+				if not Config.treesDropSelves then
+					stump.selectable_in_game = true
+					stump.minable = {mining_particle = "wooden-particle", mining_time = 0.4, result = k, count = 1}
+					if Config.longLifeStumps then
+						stump.time_before_removed = 60 * 60 * 60 * 24 -- 24h
+					end
+					if Config.bigStumpHitbox then
+						stump.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}
+					end
+				else
+					stump.time_before_removed = 1
 				end
-			end
-			if Config.longLifeStumps then
-				stump.time_before_removed = 60 * 60 * 60 * 24 -- 24h
 			end
 		end
 	end

@@ -16,4 +16,4 @@ Config.placeableTrees = true
 Config.bigStumpHitbox = true
 
 --Enable this to make trees drop themselves as well as their wood.
-Config.treesDropSelves = false
+Config.treesDropSelves = true
