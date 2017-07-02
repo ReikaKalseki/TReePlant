@@ -48,7 +48,7 @@ data:extend(
     ingredients =
     {
 		{"iron-plate", 4},
-		{type="fluid", name = "water", amount = 10},
+		{type="fluid", name = "water", amount = 100},
     },
     result = "water-capsule",
   },
