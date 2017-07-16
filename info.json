@@ -6,6 +6,6 @@
   "contact": "",
   "homepage": "",
   "factorio_version" : "0.15",
-  "description": "Makes trees replantable from their stumps. Also makes trees repairable.",
+  "description": "Makes trees replantable from their stumps. Also makes trees healable and easier to protect from damage.",
   "dependencies": ["base >= 0.12.0"]
 }
