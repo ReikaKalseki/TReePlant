@@ -17,3 +17,5 @@ Config.bigStumpHitbox = settings.startup["big-stumps"].value--true
 
 --Enable this to make trees drop themselves as well as their wood.
 Config.treesDropSelves = settings.startup["tree-drops"].value--true
+
+Config.treeSeeds = settings.startup["tree-seeds"].value--false

@@ -6,6 +6,7 @@ if Config.noTreeAttack then
 	table.insert(data.raw["simple-entity"]["stone-rock"].resistances,{type="physical",percent=100})
 	table.insert(data.raw["simple-entity"]["stone-rock"].resistances,{type="acid",percent=100})
 end
+
 for k,tree in pairs(data.raw["tree"]) do
 	if tree.subgroup == "trees" then
 		local stumpname = k .. "-stump"
@@ -16,7 +17,7 @@ for k,tree in pairs(data.raw["tree"]) do
 			table.insert(tree.resistances,{type="physical",percent=100})
 			table.insert(tree.resistances,{type="acid",percent=100})
 		end
-		if Config.placeableTrees then
+		if Config.placeableTrees or Config.treesDropSelves or Config.treeSeeds then
 			table.insert(tree.flags,"placeable-player")
 		end
 		if Config.treesDropSelves and data.raw["corpse"][stumpname] ~= nil then
@@ -40,9 +41,10 @@ for k,tree in pairs(data.raw["tree"]) do
 					if Config.bigStumpHitbox then
 						stump.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}
 					end
-				else
-					stump.time_before_removed = 1
 				end
+			end
+			if Config.placeableTrees or Config.treeSeeds then
+				stump.time_before_removed = 1
 			end
 		end
 	end
