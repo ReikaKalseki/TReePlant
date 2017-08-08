@@ -60,4 +60,11 @@ data:extend({
             default_value = false,
             order = "r",
         },
+        {
+            type = "bool-setting",
+            name = "tree-pollution-repair",
+            setting_type = "startup",
+            default_value = false,
+            order = "r",
+        },
 })

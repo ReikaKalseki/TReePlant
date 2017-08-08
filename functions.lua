@@ -1,5 +1,7 @@
 require "config"
 
+local treeItems = {}
+
 function onEntityBuilt(entity, item, stack)
 	--game.print("Built " .. entity.name .. " with " .. (item ~= nil and item or "nil"))
 	if Config.treeSeeds and isTree(entity) and (not isStump(entity)) and stack.valid and stack.valid_for_read then-- and item and string.find(item, "seed") then
@@ -9,6 +11,7 @@ function onEntityBuilt(entity, item, stack)
 		stack.count = stack.count-1
 		--if stack.count <= 0 then stack.clear() end --not necessary
 	end
+	addTreePlanter(entity)
 end
 
 function onEntityMined(entity, inventory)
@@ -27,6 +30,104 @@ function onEntityMined(entity, inventory)
 		if amt > 0 then
 			--game.print("Dropped " .. amt .. " saplings")
 			inventory.insert({name=entity.name .. "-seed", count=amt})
+		end
+	end
+	removeTreePlanter(entity)
+end
+
+function onEntityDied(entity)
+	removeTreePlanter(entity)
+end
+
+function onTick(tick)
+
+	initGlobal(false)
+
+	if not global.treeplant.loadTick then		
+		for chunk in game.surfaces["nauvis"].get_chunks() do
+			table.insert(global.treeplant.chunk_cache, chunk)
+		end
+		local entities = game.surfaces["nauvis"].find_entities_filtered({name="tree-planter"})
+		for _,entity in pairs(entities) do
+			addTreePlanter(entity)
+		end
+		global.treeplant.loadTick = true
+	end
+
+	if tick%20 == 0 then
+		for _,entity in pairs(global.treeplant.planters) do
+			tickTreePlanter(tick, entity)
+		end
+	end
+end
+
+function getAllTreeItems(loaded) --are we in data phase or control phase?
+	if treeItems[loaded] == nil then
+		treeItems[loaded] = {}
+		for name,item in pairs(loaded and game.item_prototypes or data.raw.item) do
+			--game.print(stack.name .. " >> " .. tostring(Config.treesDropSelves) .. " / " .. tostring(Config.treeSeeds))
+			if (Config.treeSeeds and string.find(name, "seed")) or (Config.treesDropSelves) then
+				local placed = item.place_result --is string in data, entityproto in control
+				if placed and string.find(loaded and placed.name or placed, "tree") then
+					table.insert(treeItems[loaded], item)
+				end
+			end
+		end
+	end
+	return treeItems[loaded]
+end
+
+function addTreePlanter(entity)
+	if entity.name == "tree-planter" then
+		table.insert(global.treeplant.planters, entity)
+		local i = 1
+		for _,item in pairs(getAllTreeItems(true)) do
+			if i > entity.request_slot_count then break end
+			entity.set_request_slot({name=item.name, count=1000000}, i)
+			i = i+1
+		end
+	end
+end
+
+function removeTreePlanter(entity)
+	if entity.name == "tree-planter" then
+		for i,planter in ipairs(global.treeplant.planters) do
+			if planter.position.x == entity.position.x and planter.position.y == entity.position.y then
+				table.remove(global.treeplant.planters, i)
+				break
+			end
+		end
+	end
+end
+
+function tickTreePlanter(tick, entity)
+	local surf = entity.surface
+	local inv = entity.get_inventory(defines.inventory.chest)
+	local slot = math.random(1, #inv)
+	local stack = inv[slot]
+	if stack and stack.valid_for_read then
+		local placed = game.item_prototypes[stack.name].place_result --still need checks here, since can manually input items
+		if placed and string.find(placed.name, "tree") then
+			local tries = 20
+			for i = 1,tries do
+				local pos = {x=entity.position.x+math.random(-50, 50), y=entity.position.y+math.random(-50, 50)}
+				local dir = math.random(0, 7)
+				if surf.can_place_entity({name=placed.name, position=pos, direction=dir, force=game.forces.neutral}) then
+					local r = 10
+					local forest = surf.find_entities_filtered({type="tree", area = {{pos.x-r, pos.y-r}, {pos.x+r, pos.y+r}}})
+					local similar = {}
+					for _,tree in pairs(forest) do
+						if tree.name == placed.name then
+							table.insert(similar, tree)
+						end
+					end
+					if #similar > 2 and #similar > #forest*0.75 then --only place if more than 2 similar trees nearby, and they are at least a 75% majority, indicating either natural worldgen or player placement desire
+						surf.create_entity({name=placed.name, position=pos, direction=dir, force=game.forces.neutral})
+						stack.count = stack.count-1
+						break
+					end
+				end
+			end
 		end
 	end
 end
@@ -127,11 +228,36 @@ function getParentTree(stump)
 	end
 end
 
-function replaceTree(stump)
-	local tree = getParentTree(stump)
-	stump.surface.create_entity{name = tree.name, direction = stump.direction, position = {x = stump.position.x,y = stump.position.y}, force = game.forces.neutral, health = 1} --force was player
-	local newtree = stump.surface.find_entities_filtered{area = {{stump.position.x, stump.position.y}, {stump.position.x, stump.position.y}}, type="tree"}
-	newtree[1].health = 1
+function replaceTree(entity)
+	if isStump(entity) then
+		local tree = getParentTree(entity)
+		local newtree = entity.surface.create_entity{name = tree.name, direction = entity.direction, position = entity.position, force = game.forces.neutral, health = 1} --force was player
+		newtree.health = 1
+		return
+	end
+	if isTree(entity) then
+		local surf = entity.surface
+		local force = entity.force
+		local name = entity.name
+		local dir = entity.direction
+		local health = entity.health
+		local pos = entity.position
+		entity.destroy()
+		surf.create_entity{name = name, direction = dir, position = pos, force = game.forces.neutral, health = health} --force was player
+	end
+end
+
+function healDamagedTrees(entity)
+	local trees = entity.surface.find_entities_filtered{area = {{entity.position.x-30, entity.position.y-30}, {entity.position.x+30, entity.position.y+30}}, type="tree"}
+	for k,v in pairs(trees) do
+		--game.print("Corpse " .. k)
+		if isTree(v) then
+			replaceTree(v)
+			if v.valid then
+				v.destroy()
+			end
+		end
+	end
 end
 
 function healStumps(entity)
@@ -141,26 +267,6 @@ function healStumps(entity)
 		if isStump(v) then
 			replaceTree(v)
 			v.destroy()
-		end
-	end
-	
-	--clear duplicated trees from early mod versions
-	local trees = entity.surface.find_entities_filtered{area = {{entity.position.x-30, entity.position.y-30}, {entity.position.x+30, entity.position.y+30}}, type="tree"}
-		for k,v in pairs(trees) do
-		--game.print("Tree " .. k)
-		if v.valid and isTree(v) then
-			local same = entity.surface.find_entities_filtered{area = {{v.position.x, v.position.y}, {v.position.x, v.position.y}}, type="tree"}
-			--game.print("Found at position " .. v.position.x .. "," .. v.position.y .. " : " .. #same)
-			if #same > 1 then
-				local surf = v.surface
-				local dir = v.direction
-				local pos = v.position
-				local t = v.name
-				for k2,v2 in pairs(same) do --clear all existing, place new one
-					v2.destroy()
-				end
-				surf.create_entity{name = t, direction = dir, position = {x = pos.x,y = pos.y}, force = game.forces.neutral}
-			end
 		end
 	end
 end

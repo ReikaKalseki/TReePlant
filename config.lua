@@ -19,3 +19,5 @@ Config.bigStumpHitbox = settings.startup["big-stumps"].value--true
 Config.treesDropSelves = settings.startup["tree-drops"].value--true
 
 Config.treeSeeds = settings.startup["tree-seeds"].value--false
+
+Config.treePollutionRepair = settings.startup["tree-pollution-repair"].value--false

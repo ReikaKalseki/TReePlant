@@ -7,9 +7,36 @@ if Config.noTreeAttack then
 	table.insert(data.raw["simple-entity"]["stone-rock"].resistances,{type="acid",percent=100})
 end
 
+local function createStump(tree)
+	local ret = table.deepcopy(data.raw.corpse["tree-01-stump"])
+	ret.name = tree.name .. "-stump"
+	ret.localised_name = {"entity-name.tree-01-stump"}
+	data:extend({
+		ret
+	})
+    tree.corpse = ret.name
+	tree.remains_when_mined = ret.name
+	return ret
+end
+
 for k,tree in pairs(data.raw["tree"]) do
 	if tree.subgroup == "trees" then
 		local stumpname = k .. "-stump"
+		local stump = data.raw["corpse"][stumpname]
+		if not stump then
+			stump = createStump(tree)
+		end
+		--log("Processing tree '" .. k .. "', stump = " .. (stump and stumpname or "nil"))
+		
+		--[[
+		if string.find(k, "purple") then
+			tree.localised_name = "Purple " .. tree.localised_name
+		end
+		if string.find(k, "blue") then
+			tree.localised_name = "Blue " .. tree.localised_name
+		end
+		--]]
+		
 		if Config.noTreeAttack then
 			if tree.resistances == nil then
 				tree.resistances = {}
@@ -20,7 +47,7 @@ for k,tree in pairs(data.raw["tree"]) do
 		if Config.placeableTrees or Config.treesDropSelves or Config.treeSeeds then
 			table.insert(tree.flags,"placeable-player")
 		end
-		if Config.treesDropSelves and data.raw["corpse"][stumpname] ~= nil then
+		if Config.treesDropSelves then
 			tree.minable.results = {}
 			table.insert(tree.minable.results, {name=tree.minable.result, amount=tree.minable.count})
 			table.insert(tree.minable.results, {name=k, amount = 1})
@@ -29,7 +56,6 @@ for k,tree in pairs(data.raw["tree"]) do
 		if Config.treeRepair then
 			--remove not-repairable flag, but that flag is not even present...
 		end
-		local stump = data.raw["corpse"][stumpname]
 		if stump ~= nil then
 			if Config.placeableTrees then
 				if not Config.treesDropSelves then
@@ -44,7 +70,12 @@ for k,tree in pairs(data.raw["tree"]) do
 				end
 			end
 			if Config.placeableTrees or Config.treeSeeds then
-				stump.time_before_removed = 1
+				--stump.time_before_removed = 1
+				
+				--stump.minable.result = nil
+				--stump.minable.results = nil
+				
+				tree.remains_when_mined = nil
 			end
 		end
 	end
