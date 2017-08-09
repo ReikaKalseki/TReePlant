@@ -66,7 +66,7 @@ function getAllTreeItems(loaded) --are we in data phase or control phase?
 		treeItems[loaded] = {}
 		for name,item in pairs(loaded and game.item_prototypes or data.raw.item) do
 			--game.print(stack.name .. " >> " .. tostring(Config.treesDropSelves) .. " / " .. tostring(Config.treeSeeds))
-			if (Config.treeSeeds and string.find(name, "seed")) or (Config.treesDropSelves) then
+			if (Config.treeSeeds and string.find(name, "seed")) or (Config.treesDropSelves or Config.placeableTrees) then
 				local placed = item.place_result --is string in data, entityproto in control
 				if placed and string.find(loaded and placed.name or placed, "tree") then
 					table.insert(treeItems[loaded], item)
