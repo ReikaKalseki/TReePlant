@@ -194,6 +194,7 @@ function isFire(entity)
 end
 
 function isTree(entity)
+	if entity.name == "tree-planter" then return false end
 	local idx = entity.name:match'^.*()-'
 	--game.print(idx)
 	if idx ~= nil then
