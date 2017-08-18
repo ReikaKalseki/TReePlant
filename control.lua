@@ -27,10 +27,6 @@ script.on_configuration_changed(function()
 	initGlobal(true)
 end)
 
-script.on_init(function()
-	initGlobal(true)
-end)
-
 script.on_event(defines.events.on_entity_died, function(event)
 	onEntityDied(event.entity)
 end)

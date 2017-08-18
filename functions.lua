@@ -243,8 +243,13 @@ function replaceTree(entity)
 		local dir = entity.direction
 		local health = entity.health
 		local pos = entity.position
+		local var = entity.graphics_variation
+		--0.16 -- local clr = entity.tree_color_index and entity.tree_color_index or nil
 		entity.destroy()
-		surf.create_entity{name = name, direction = dir, position = pos, force = game.forces.neutral, health = health} --force was player
+		local ret = surf.create_entity{name = name, direction = dir, position = pos, force = game.forces.neutral, health = health} --force was player
+		ret.graphics_variation = var
+		ret.health = health
+		--ret.tree_color_index = clr
 	end
 end
 

@@ -21,12 +21,19 @@ end
 
 for k,tree in pairs(data.raw["tree"]) do
 	if tree.subgroup == "trees" then
+		if k == nil then
+			local msg = "Someone created a tree with a nil name! This is a serious error!"
+			if tree.icon ~= nil then
+				msg = msg .. " Tree Icon (for help in finding the mod): " .. tree.icon
+			end
+			error(serpent.block(msg))
+		end
 		local stumpname = k .. "-stump"
 		local stump = data.raw["corpse"][stumpname]
 		if not stump then
 			stump = createStump(tree)
 		end
-		--log("Processing tree '" .. k .. "', stump = " .. (stump and stumpname or "nil"))
+		log("Processing tree '" .. k .. "', stump = " .. (stump and stumpname or "nil"))
 		
 		--[[
 		if string.find(k, "purple") then
@@ -48,8 +55,10 @@ for k,tree in pairs(data.raw["tree"]) do
 			table.insert(tree.flags,"placeable-player")
 		end
 		if Config.treesDropSelves then
-			tree.minable.results = {}
-			table.insert(tree.minable.results, {name=tree.minable.result, amount=tree.minable.count})
+			if tree.minable.result and not tree.minable.results then
+				tree.minable.results = {}
+				table.insert(tree.minable.results, {name=tree.minable.result, amount=tree.minable.count})
+			end
 			table.insert(tree.minable.results, {name=k, amount = 1})
 			tree.minable.result = nil
 		end
