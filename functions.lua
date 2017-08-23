@@ -4,7 +4,7 @@ local treeItems = {}
 
 function onEntityBuilt(entity, item, stack)
 	--game.print("Built " .. entity.name .. " with " .. (item ~= nil and item or "nil"))
-	if Config.treeSeeds and isTree(entity) and (not isStump(entity)) and stack.valid and stack.valid_for_read then-- and item and string.find(item, "seed") then
+	if Config.treeSeeds and isTree(entity) and (not isStump(entity)) and stack and stack.valid and stack.valid_for_read then-- and item and string.find(item, "seed") then
 		--inventory.remove({name=--[[item--]]entity.name .. "-seed", count=1})
 		--game.print("Removing " .. (entity.name .. "-seed") .. " from:")
 		--local stack = inventory.find_item_stack((entity.name .. "-seed"))

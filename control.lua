@@ -44,7 +44,7 @@ script.on_event(defines.events.on_built_entity, function(event)
 end)
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
-	onEntityBuilt(event.created_entity, event.item, event.robot.get_inventory(defines.inventory.robot_cargo)[1])
+	onEntityBuilt(event.created_entity, event.item, event.robot and event.robot.get_inventory and event.robot.get_inventory(defines.inventory.robot_cargo)[1] or nil)
 end)
 
 script.on_event(defines.events.on_tick, function(event)
