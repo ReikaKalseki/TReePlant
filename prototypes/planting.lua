@@ -6,6 +6,7 @@ data:extend({
     type = "item",
     name = "tree-planter",
     icon = "__TreePlant__/graphics/tree-planter-ico.png",
+	icon_size = 32,
     flags = {"goes-to-quickbar"},
     subgroup = "logistic-network",
     order = "b[storage]-c[tree-planter]",
@@ -23,6 +24,7 @@ data:extend({
     type = "logistic-container",
     name = "tree-planter", --make the actual planter a roboport which offers big construction area; make that the AOE of the planter (make it use robots to plant (place ghosts)?)? that gates behind robots, which is bad; and lets it allow construction of other things, also bad
     icon = "__TreePlant__/graphics/tree-planter-ico.png",
+	icon_size = 32,
     flags = {"placeable-player", "player-creation"},
     minable = {hardness = 0.4, mining_time = 0.75, result = "tree-planter"},
     max_health = 350,
@@ -38,7 +40,7 @@ data:extend({
     },
     fast_replaceable_group = "container",
     inventory_size = 80,
-	num_logistic_slots = #getAllTreeItems(false),
+	logistic_slots_count = #getAllTreeItems(false),
     logistic_mode = "requester",
     open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
     close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
@@ -52,20 +54,8 @@ data:extend({
 	  scale = 0.5,
       shift = {0.25, 0.25}
     },
-    circuit_wire_connection_point =
-    {
-      shadow =
-      {
-        red = {0.734375, 0.453125},
-        green = {0.609375, 0.515625},
-      },
-      wire =
-      {
-        red = {0.40625, 0.21875},
-        green = {0.40625, 0.375},
-      }
-    },
+    circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
+    circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
     circuit_wire_max_distance = 12,
-    circuit_connector_sprites = get_circuit_connector_sprites({0.1875, 0.15625}, nil, 18),
   },
 })

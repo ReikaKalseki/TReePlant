@@ -2,9 +2,16 @@ require("config")
 
 -- Trees & rocks do not get killed by biters
 
+local rocks = {"stone-rock", "small-rock", "red-desert-rock-big-01", "red-desert-rock-huge-01", "red-desert-rock-huge-02", "red-desert-rock-medium", "red-desert-rock-small", "red-desert-rock-tiny"}
+
 if Config.noTreeAttack then
-	table.insert(data.raw["simple-entity"]["stone-rock"].resistances,{type="physical",percent=100})
-	table.insert(data.raw["simple-entity"]["stone-rock"].resistances,{type="acid",percent=100})
+	for _,rock in pairs(rocks) do
+		local proto = data.raw["simple-entity"][rock]
+		if proto then
+			table.insert(proto.resistances,{type="physical",percent=100})
+			table.insert(proto.resistances,{type="acid",percent=100})
+		end
+	end
 end
 
 local function createStump(tree)

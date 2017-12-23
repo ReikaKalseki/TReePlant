@@ -7,6 +7,7 @@ data:extend(
     type = "capsule",
     name = "water-capsule",
     icon = "__TreePlant__/graphics/water-capsule.png",
+	icon_size = 32,
     flags = {"goes-to-quickbar"},
     capsule_action =
     {
@@ -127,7 +128,7 @@ data:extend(
           action =
           {
             type = "area",
-            perimeter = 30,
+            radius = 30,
             entity_flags = {"breaths-air"},
             action_delivery =
             {

@@ -2,12 +2,10 @@ require "config"
 
 local treeItems = {}
 
-function onEntityBuilt(entity, item, stack)
-	--game.print("Built " .. entity.name .. " with " .. (item ~= nil and item or "nil"))
-	if Config.treeSeeds and isTree(entity) and (not isStump(entity)) and stack and stack.valid and stack.valid_for_read then-- and item and string.find(item, "seed") then
-		--inventory.remove({name=--[[item--]]entity.name .. "-seed", count=1})
+function onEntityBuilt(entity, stack)
+	--game.print("Built " .. entity.name .. " with " .. ((stack ~= nil and stack.valid and stack.valid_for_read) and stack.name or "nil"))
+	if Config.treeSeeds and isTree(entity) and (not isStump(entity)) and stack and stack.valid and stack.valid_for_read then
 		--game.print("Removing " .. (entity.name .. "-seed") .. " from:")
-		--local stack = inventory.find_item_stack((entity.name .. "-seed"))
 		stack.count = stack.count-1
 		--if stack.count <= 0 then stack.clear() end --not necessary
 	end
@@ -148,6 +146,7 @@ function createTreeItem(name_, tree)
     type = "item",
     name = name_,
     icon = tree.icon,
+	icon_size = tree.icon_size,
     flags = {"goes-to-quickbar"},
     subgroup = "trees",
     order = "a[items]-c[" .. name_ .. "]",
@@ -244,12 +243,12 @@ function replaceTree(entity)
 		local health = entity.health
 		local pos = entity.position
 		local var = entity.graphics_variation
-		--0.16 -- local clr = entity.tree_color_index and entity.tree_color_index or nil
+		local clr = entity.tree_color_index and entity.tree_color_index or nil
 		entity.destroy()
 		local ret = surf.create_entity{name = name, direction = dir, position = pos, force = game.forces.neutral, health = health} --force was player
 		ret.graphics_variation = var
 		ret.health = health
-		--ret.tree_color_index = clr
+		ret.tree_color_index = clr
 	end
 end
 
