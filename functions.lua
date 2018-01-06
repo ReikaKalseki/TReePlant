@@ -146,7 +146,7 @@ function createTreeItem(name_, tree)
     type = "item",
     name = name_,
     icon = tree.icon,
-	icon_size = tree.icon_size,
+	icon_size = tree.icon_size and tree.icon_size or 32,
     flags = {"goes-to-quickbar"},
     subgroup = "trees",
     order = "a[items]-c[" .. name_ .. "]",
