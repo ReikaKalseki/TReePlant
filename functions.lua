@@ -174,6 +174,7 @@ function createTreeSeed(name_, tree)
     type = "item",
     name = name_ .. "-seed",
     icons = {{icon=tree.icon}, {icon="__TreePlant__/graphics/seed.png"}},
+	icon_size = 32,
     flags = {"goes-to-quickbar"},
     subgroup = "trees",
 	localised_name = {"item-name.tree-seed"},--{"entity-name." .. name_, {"item-name.tree-seed"}},--{{"entity-name." .. name_}, "item-name.tree-seed"},
