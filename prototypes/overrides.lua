@@ -2,14 +2,12 @@ require("config")
 
 -- Trees & rocks do not get killed by biters
 
-local rocks = {"stone-rock", "small-rock", "red-desert-rock-big-01", "red-desert-rock-huge-01", "red-desert-rock-huge-02", "red-desert-rock-medium", "red-desert-rock-small", "red-desert-rock-tiny"}
-
 if Config.noTreeAttack then
-	for _,rock in pairs(rocks) do
-		local proto = data.raw["simple-entity"][rock]
-		if proto then
-			table.insert(proto.resistances,{type="physical",percent=100})
-			table.insert(proto.resistances,{type="acid",percent=100})
+	for name,rock in pairs(data.raw["simple-entity"]) do
+		if string.find(name, "rock") or string.find(name, "stone") then
+			table.insert(rock.resistances,{type="physical",percent=100})
+			table.insert(rock.resistances,{type="acid",percent=100})
+			log("Making " .. name .. " immune to biter attack")
 		end
 	end
 end
