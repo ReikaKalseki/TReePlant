@@ -76,7 +76,7 @@ for k,tree in pairs(data.raw["tree"]) do
 					stump.selectable_in_game = true
 					stump.minable = {mining_particle = "wooden-particle", mining_time = 0.4, result = k, count = 1}
 					if Config.longLifeStumps then
-						stump.time_before_removed = 60 * 60 * 60 * 24 -- 24h
+						stump.time_before_removed = 60 * 60 * 60 * 24 * 30 -- one month
 					end
 					if Config.bigStumpHitbox then
 						stump.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}

@@ -19,6 +19,25 @@ end
 
 initGlobal(true)
 
+script.on_load(function()	
+	commands.add_command("findStumps", {"cmd.find-stumps-help"}, function(event)
+		local count = 0
+		local player = game.players[event.player_index]
+		local sound = true
+		for _,e in pairs(player.surface.find_entities_filtered{type = "corpse"}) do
+			if string.find(e.name, "stump") then
+				count = count+1
+				player.add_custom_alert(e, {type = "virtual", name = "tree-stump-alert"}, {"virtual-signal-name.tree-stump-alert", serpent.block(e.position)}, true)
+				if sound then
+					player.play_sound{path="utility/alert_construction", position=player.position, volume_modifier=1}
+					sound = false
+				end
+			end
+		end
+		game.print("TreePlant: Identified " .. count .. " dead trees.")
+	end)
+end)
+
 script.on_init(function()
 	initGlobal(true)
 end)
@@ -68,7 +87,25 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 	elseif event.entity.name == "tree-healing-cloud" then
 		if Config.treePollutionRepair then
 			healDamagedTrees(event.entity)
+		else
+			
 		end
 		healStumps(event.entity)
 	end
 end)
+
+--[[
+script.on_event(defines.events.on_put_item, function(event)	
+	local player = game.players[event.player_index]
+	local stack = player.cursor_stack
+	
+	if not (stack.valid_for_read) then
+		return
+	end
+	
+	if string.find(stack.name, "rock-var", 1, true) then
+		game.print(stack.name)
+		return
+	end
+end)
+--]]

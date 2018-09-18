@@ -67,4 +67,11 @@ data:extend({
             default_value = false,
             order = "r",
         },
+        {
+            type = "bool-setting",
+            name = "movable-rocks",
+            setting_type = "startup",
+            default_value = true,
+            order = "r",
+        },
 })

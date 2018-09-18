@@ -135,13 +135,13 @@ data:extend(
               target_effects =
               {
                 type = "damage",
-                damage = { amount = -20, type = "electric"}
+                damage = { amount = -1, type = "electric"}
               }
             }
           }
         }
       }
     },
-    action_frequency = 10 --was 10
+    action_cooldown = 10 --was 10
   },
 })

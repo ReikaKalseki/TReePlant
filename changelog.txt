@@ -1,0 +1,8 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.148
+Date: Sep 18 2018
+	- Added option to make rocks mineable and placeable as themselves
+	- Fixed tree healing capsule not working
+	- Lengthened stump lifetime again
+	- Added command to find tree stumps: /findStumps
+---------------------------------------------------------------------------------------------------

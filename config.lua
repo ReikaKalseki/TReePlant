@@ -21,3 +21,5 @@ Config.treesDropSelves = settings.startup["tree-drops"].value--true
 Config.treeSeeds = settings.startup["tree-seeds"].value--false
 
 Config.treePollutionRepair = settings.startup["tree-pollution-repair"].value--false
+
+Config.movableRocks = settings.startup["movable-rocks"].value--true

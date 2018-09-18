@@ -1,6 +1,7 @@
 require "config"
 
 local treeItems = {}
+local rockItems = {}
 
 function onEntityBuilt(entity, stack)
 	--game.print("Built " .. entity.name .. " with " .. ((stack ~= nil and stack.valid and stack.valid_for_read) and stack.name or "nil"))
@@ -9,7 +10,16 @@ function onEntityBuilt(entity, stack)
 		stack.count = stack.count-1
 		--if stack.count <= 0 then stack.clear() end --not necessary
 	end
+	if Config.movableRocks and isRock(entity) and stack and stack.valid_for_read then
+		local var = string.sub(stack.name, string.len(entity.name)+string.len("-var")+1)
+		entity.graphics_variation = tonumber(var)
+		--game.print(entity.name .. " with var " .. entity.graphics_variation)
+	end
 	addTreePlanter(entity)
+end
+
+function isRock(entity)
+	return entity.type == "simple-entity" and (string.find(entity.name, "rock") or string.find(entity.name, "stone"))
 end
 
 function onEntityMined(entity, inventory)
@@ -30,6 +40,15 @@ function onEntityMined(entity, inventory)
 			inventory.insert({name=entity.name .. "-seed", count=amt})
 		end
 	end
+	if Config.movableRocks and isRock(entity) then
+		--game.print(entity.name .. " with var " .. entity.graphics_variation)
+		local idx = string.find(inventory[1].name, "%-[^-]+$")
+		local n = string.sub(inventory[1].name, 1, idx-1)
+		n = n .. "-var" .. entity.graphics_variation
+		local add = {name=n, count=inventory[1].count}
+		inventory.clear()
+		inventory.insert(add)
+	end
 	removeTreePlanter(entity)
 end
 
@@ -38,7 +57,6 @@ function onEntityDied(entity)
 end
 
 function onTick(tick)
-
 	initGlobal(false)
 
 	if not global.treeplant.loadTick then		
@@ -130,6 +148,35 @@ function tickTreePlanter(tick, entity)
 	end
 end
 
+function createRockItems(name_, rock)
+
+  if rock == nil then
+	error(serpent.block("Could not create rock item " .. name_ .. ", parent entity does not exist.")) --equivalent to 'throw new RuntimeException(sg)', since print, aka System.out.println(sg), does not work
+  end
+  
+  local li = {}
+  for i,var in pairs(rock.pictures) do
+  --actual item
+	  local result =
+	  {
+		type = "item",
+		name = name_ .. "-var" .. i,
+		icon = rock.icon,
+		icon_size = rock.icon_size and rock.icon_size or 32,
+		flags = {"goes-to-quickbar"},
+		subgroup = "trees",
+		order = "a[items]-c[" .. name_ .. "]",
+		place_result = name_,
+		stack_size = 50,
+		localised_name = {"rock-item.name", {"entity-name.rock"}, i}--{"entity-name." .. name_}
+	  }
+	table.insert(li, result)
+  end
+
+  log("Created rock item " .. name_)  
+  return li
+end
+
 function createTreeItem(name_, tree)
 
   if tree == nil then
@@ -154,7 +201,7 @@ function createTreeItem(name_, tree)
     stack_size = 50
   }
 
-  --log("Created tree item " .. name_)
+  log("Created tree item " .. name_)
   
   return result
 end
@@ -234,9 +281,9 @@ function replaceTree(entity)
 		local tree = getParentTree(entity)
 		local newtree = entity.surface.create_entity{name = tree.name, direction = entity.direction, position = entity.position, force = game.forces.neutral, health = 1} --force was player
 		newtree.health = 1
-		return
+		return true
 	end
-	if isTree(entity) then
+	if isTree(entity) and not string.find(entity.name, "dead") and entity.health >= entity.prototype.max_health then
 		local surf = entity.surface
 		local force = entity.force
 		local name = entity.name
@@ -244,13 +291,16 @@ function replaceTree(entity)
 		local health = entity.health
 		local pos = entity.position
 		local var = entity.graphics_variation
-		local clr = entity.tree_color_index and entity.tree_color_index or nil
+		local clr = entity.tree_color_index and entity.tree_color_index or 0
 		entity.destroy()
 		local ret = surf.create_entity{name = name, direction = dir, position = pos, force = game.forces.neutral, health = health} --force was player
 		ret.graphics_variation = var
 		ret.health = health
+		--game.print(name .. ": " .. clr)
 		ret.tree_color_index = clr
+		return true
 	end
+	return false
 end
 
 function healDamagedTrees(entity)
@@ -258,9 +308,10 @@ function healDamagedTrees(entity)
 	for k,v in pairs(trees) do
 		--game.print("Corpse " .. k)
 		if isTree(v) then
-			replaceTree(v)
-			if v.valid then
-				v.destroy()
+			if replaceTree(v) then
+				if v.valid then
+					v.destroy()
+				end
 			end
 		end
 	end
