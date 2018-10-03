@@ -154,6 +154,18 @@ function createRockItems(name_, rock)
 	error(serpent.block("Could not create rock item " .. name_ .. ", parent entity does not exist.")) --equivalent to 'throw new RuntimeException(sg)', since print, aka System.out.println(sg), does not work
   end
   
+  local biome = name_
+  biome = string.gsub(biome, "rock", "")
+  biome = string.gsub(biome, "stone", "")
+  biome = string.gsub(biome, "large", "")
+  biome = string.gsub(biome, "big", "")
+  biome = string.gsub(biome, "huge", "")
+  biome = string.gsub(biome, "medium", "")
+  biome = string.gsub(biome, "%-", "")
+  if biome == "" then biome = "basic" end
+  biome = biome:gsub("^%l", string.upper)
+  log("Identified biome type '" .. biome .. "'")
+  
   local li = {}
   for i,var in pairs(rock.pictures) do
   --actual item
@@ -168,7 +180,7 @@ function createRockItems(name_, rock)
 		order = "a[items]-c[" .. name_ .. "]",
 		place_result = name_,
 		stack_size = 50,
-		localised_name = {"rock-item.name", {"entity-name.rock"}, i}--{"entity-name." .. name_}
+		localised_name = {"rock-item.name", {"entity-name.rock"}, i, biome}--{"entity-name." .. name_}
 	  }
 	table.insert(li, result)
   end
