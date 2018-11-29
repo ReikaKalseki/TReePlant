@@ -37,7 +37,12 @@ function onEntityMined(entity, inventory)
 		end
 		if amt > 0 then
 			--game.print("Dropped " .. amt .. " saplings")
-			inventory.insert({name=entity.name .. "-seed", count=amt})
+			local iname = entity.name .. "-seed"
+			if game.item_prototypes[iname] then
+				inventory.insert({name=iname, count=amt})
+			else
+			
+			end
 		end
 	end
 	if Config.movableRocks and isRock(entity) then

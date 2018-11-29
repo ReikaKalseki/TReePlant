@@ -5,6 +5,7 @@ require("config")
 if Config.noTreeAttack then
 	for name,rock in pairs(data.raw["simple-entity"]) do
 		if string.find(name, "rock") or string.find(name, "stone") then
+			if not rock.resistances then rock.resistances = {} end
 			table.insert(rock.resistances,{type="physical",percent=100})
 			table.insert(rock.resistances,{type="acid",percent=100})
 			log("Making " .. name .. " immune to biter attack")

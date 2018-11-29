@@ -19,7 +19,7 @@ end
 
 initGlobal(true)
 
-script.on_load(function()	
+local function addCommands()
 	commands.add_command("findStumps", {"cmd.find-stumps-help"}, function(event)
 		local count = 0
 		local player = game.players[event.player_index]
@@ -36,6 +36,12 @@ script.on_load(function()
 		end
 		game.print("TreePlant: Identified " .. count .. " dead trees.")
 	end)
+end
+
+addCommands()
+
+script.on_load(function()
+	
 end)
 
 script.on_init(function()
