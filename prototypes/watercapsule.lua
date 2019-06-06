@@ -8,7 +8,7 @@ data:extend(
     name = "water-capsule",
     icon = "__TreePlant__/graphics/water-capsule.png",
 	icon_size = 32,
-    flags = {"goes-to-quickbar"},
+    flags = {},
     capsule_action =
     {
       type = "throw",

@@ -8,7 +8,7 @@ data:extend(
     name = "tree-healing-capsule",
     icon = "__TreePlant__/graphics/tree-capsule.png",
 	icon_size = 32,
-    flags = {"goes-to-quickbar"},
+    flags = {},
     capsule_action =
     {
       type = "throw",
@@ -47,7 +47,7 @@ data:extend(
     energy_required = 2,
     ingredients =
     {
-		{"raw-wood", 5},
+		{"wood", 5},
 		{"coal", 1},
     },
     result = "tree-healing-capsule",
