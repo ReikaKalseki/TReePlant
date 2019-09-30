@@ -215,7 +215,9 @@ function createTreeItem(name_, tree)
     subgroup = "trees",
     order = "a[items]-c[" .. name_ .. "]",
     place_result = name_,
-    stack_size = 50
+    stack_size = 50,
+	fuel_category = "chemical",
+    fuel_value = "400kJ"
   }
 
   log("Created tree item " .. name_)
@@ -244,7 +246,9 @@ function createTreeSeed(name_, tree)
 	localised_name = {"item-name.tree-seed"},--{"entity-name." .. name_, {"item-name.tree-seed"}},--{{"entity-name." .. name_}, "item-name.tree-seed"},
     order = "a[items]-c[" .. name_ .. "]",
     place_result = name_,
-    stack_size = 100
+    stack_size = 100,
+	fuel_category = "chemical",
+    fuel_value = "400kJ"
   }
 	  
   --log("Created tree seed for " .. name_)

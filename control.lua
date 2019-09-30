@@ -29,7 +29,7 @@ local function addCommands()
 				count = count+1
 				player.add_custom_alert(e, {type = "virtual", name = "tree-stump-alert"}, {"virtual-signal-name.tree-stump-alert", serpent.block(e.position)}, true)
 				if sound then
-					player.play_sound{path="utility/alert_construction", position=player.position, volume_modifier=1}
+					player.play_sound{path="utility/console_message", position=player.position, volume_modifier=1}
 					sound = false
 				end
 			end
