@@ -22,7 +22,7 @@ function isRock(entity)
 	return entity.type == "simple-entity" and (string.find(entity.name, "rock") or string.find(entity.name, "stone"))
 end
 
-function onEntityMined(entity, inventory)
+function onEntityMined(entity, inventory, directList)
 	--game.print("Mined " .. entity.name)
 	if isStump(entity) then
 		--replaceTree(entity)
@@ -39,20 +39,31 @@ function onEntityMined(entity, inventory)
 			--game.print("Dropped " .. amt .. " saplings")
 			local iname = entity.name .. "-seed"
 			if game.item_prototypes[iname] then
-				inventory.insert({name=iname, count=amt})
+				if directList then
+					table.insert(directList, {name=iname, count=amt})
+				else
+					inventory.insert({name=iname, count=amt})
+				end
 			else
 			
 			end
 		end
 	end
 	if Config.movableRocks and isRock(entity) then
-		--game.print(entity.name .. " with var " .. entity.graphics_variation)
-		local idx = string.find(inventory[1].name, "%-[^-]+$")
-		local n = string.sub(inventory[1].name, 1, idx-1)
-		n = n .. "-var" .. entity.graphics_variation
-		local add = {name=n, count=inventory[1].count}
-		inventory.clear()
-		inventory.insert(add)
+		if directList then--[[
+			local n = entity.name .. "-var" .. entity.graphics_variation
+			local add = {name=n, count=1}
+			table.insert(directList, add)
+			--]]
+		else
+			--game.print(entity.name .. " with var " .. entity.graphics_variation)
+			local idx = string.find(inventory[1].name, "%-[^-]+$")
+			local n = string.sub(inventory[1].name, 1, idx-1)
+			n = n .. "-var" .. entity.graphics_variation
+			local add = {name=n, count=inventory[1].count}
+			inventory.clear()
+			inventory.insert(add)
+		end
 	end
 	removeTreePlanter(entity)
 end

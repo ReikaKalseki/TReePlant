@@ -72,6 +72,14 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 	onEntityBuilt(event.created_entity, event.stack)
 end)
 
+script.on_event(defines.events.script_raised_destroy, function(event)
+	local dropExtra = {}
+	onEntityMined(event.entity, nil, dropExtra)
+	for _,e in pairs(dropExtra) do
+		event.entity.surface.spill_item_stack(event.entity.position, e, true, event.entity.force, false)
+	end
+end)
+
 script.on_event(defines.events.on_tick, function(event)
 	onTick(game.tick)
 end)
