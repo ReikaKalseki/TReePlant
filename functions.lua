@@ -72,27 +72,6 @@ function onEntityDied(entity)
 	removeTreePlanter(entity)
 end
 
-function onTick(tick)
-	initGlobal(false)
-
-	if not global.treeplant.loadTick then		
-		for chunk in game.surfaces["nauvis"].get_chunks() do
-			table.insert(global.treeplant.chunk_cache, chunk)
-		end
-		local entities = game.surfaces["nauvis"].find_entities_filtered({name="tree-planter"})
-		for _,entity in pairs(entities) do
-			addTreePlanter(entity)
-		end
-		global.treeplant.loadTick = true
-	end
-
-	if tick%20 == 0 then
-		for _,entity in pairs(global.treeplant.planters) do
-			tickTreePlanter(tick, entity)
-		end
-	end
-end
-
 function getAllTreeItems(loaded) --are we in data phase or control phase?
 	if treeItems[loaded] == nil then
 		treeItems[loaded] = {}
@@ -308,7 +287,7 @@ function getParentTree(stump)
 	end
 end
 
-function replaceTree(entity)
+function repairOrReplaceTree(entity)
 	if isStump(entity) then
 		local tree = getParentTree(entity)
 		local newtree = entity.surface.create_entity{name = tree.name, direction = entity.direction, position = entity.position, force = game.forces.neutral, health = 1} --force was player
@@ -316,6 +295,7 @@ function replaceTree(entity)
 		return true
 	end
 	if isTree(entity) and not string.find(entity.name, "dead") and entity.health >= entity.prototype.max_health then
+	--[[
 		local surf = entity.surface
 		local force = entity.force
 		local name = entity.name
@@ -331,6 +311,10 @@ function replaceTree(entity)
 		--game.print(name .. ": " .. clr)
 		ret.tree_color_index = clr
 		return true
+		--]]
+		entity.health = entity.prototype.max_health
+		entity.tree_stage_index = 1
+		return false
 	end
 	return false
 end
@@ -340,7 +324,7 @@ function healDamagedTrees(entity)
 	for k,v in pairs(trees) do
 		--game.print("Corpse " .. k)
 		if isTree(v) then
-			if replaceTree(v) then
+			if repairOrReplaceTree(v) then
 				if v.valid then
 					v.destroy()
 				end
@@ -365,6 +349,45 @@ function extinguishFire(entity)
 	for k,v in pairs(fires) do
 		if isFire(v) then
 			v.destroy()
+		end
+	end
+end
+
+function controlChunk(surface, area)
+	local entities = surface.find_entities_filtered{area = area, type = "tree", force = game.forces.neutral}
+	for _,e in pairs(entities) do
+		repairOrReplaceTree(e)
+	end
+end
+
+local ranTick = false
+
+function onTick(tick)
+	initGlobal(false)
+	
+	if not ranTick and Config.repairRetrogen then
+		ranTick = true
+		local s = game.surfaces["nauvis"]
+		for c in s.get_chunks() do
+			controlChunk(s, c.area)
+		end
+		game.print("Trees repaired.")
+	end
+
+	if not global.treeplant.loadTick then		
+		for chunk in game.surfaces["nauvis"].get_chunks() do
+			table.insert(global.treeplant.chunk_cache, chunk)
+		end
+		local entities = game.surfaces["nauvis"].find_entities_filtered({name="tree-planter"})
+		for _,entity in pairs(entities) do
+			addTreePlanter(entity)
+		end
+		global.treeplant.loadTick = true
+	end
+
+	if tick%20 == 0 then
+		for _,entity in pairs(global.treeplant.planters) do
+			tickTreePlanter(tick, entity)
 		end
 	end
 end
