@@ -1,5 +1,8 @@
 require "config"
 
+require "__DragonIndustries__.arrays"
+require "__DragonIndustries__.boxes"
+
 local treeItems = {}
 local rockItems = {}
 
@@ -14,6 +17,37 @@ function onEntityBuilt(entity, stack)
 		local var = string.sub(stack.name, string.len(entity.name)+string.len("-var")+1)
 		entity.graphics_variation = tonumber(var)
 		--game.print(entity.name .. " with var " .. entity.graphics_variation)
+	end
+	if Config.replantDeco and false then
+		local autolist = global.autolist
+		if not autolist then autolist = {}
+			for name,proto in pairs(game.decorative_prototypes) do
+				if proto.autoplace_specification and table_size(proto.collision_mask) > 0 then
+					table.insert(autolist, name)
+				end
+			end
+			global.autolist = autolist
+			game.print("Regenning " .. #autolist .. " decoratives:")
+			--game.print(serpent.block(autolist))
+		end
+		--local box = getPaddedBox(entity, 2, 2)
+		--local decos = entity.surface.find_decoratives_filtered{area=box}
+		--game.print(#decos)
+		--
+		local cx = math.floor(entity.position.x/32)
+		local cy = math.floor(entity.position.y/32)
+		local chunks = {}
+		for i = -1,1 do
+			for k = -1,1 do
+				table.insert(chunks, {cx+i, cy+k})
+			end
+		end
+		local box = {{cx*32-32, cy*32-32}, {cx*32+64, cy*32+64}}
+		if #autolist > 0 then
+			entity.surface.destroy_decoratives{area = box, name = autolist}
+			entity.surface.regenerate_decorative(autolist, chunks) --does NOT recreate AlienBiomes ones
+		end
+		--
 	end
 	addTreePlanter(entity)
 end
@@ -338,7 +372,7 @@ function healStumps(entity)
 	for k,v in pairs(stumps) do
 		--game.print("Corpse " .. k)
 		if isStump(v) then
-			replaceTree(v)
+			repairOrReplaceTree(v)
 			v.destroy()
 		end
 	end

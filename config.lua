@@ -24,4 +24,6 @@ Config.treePollutionRepair = settings.startup["tree-pollution-repair"].value--fa
 
 Config.movableRocks = settings.startup["movable-rocks"].value--true
 
+Config.replantDeco = settings.startup["replant-decoratives"].value--true
+
 Config.repairRetrogen = false
