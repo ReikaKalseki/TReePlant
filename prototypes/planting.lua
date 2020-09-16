@@ -1,6 +1,10 @@
 require "config"
 require "functions"
 
+local items = getAllTreeItems(false)
+
+if #items == 0 then return end
+
 data:extend({
   {
     type = "item",
@@ -40,7 +44,7 @@ data:extend({
     },
     fast_replaceable_group = "container",
     inventory_size = 80,
-	logistic_slots_count = #getAllTreeItems(false),
+	logistic_slots_count = #items,
     logistic_mode = "requester",
     open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
     close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },

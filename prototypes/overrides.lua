@@ -1,5 +1,7 @@
 require("config")
 
+require "__DragonIndustries__.entities"
+
 -- Trees & rocks do not get killed by biters
 
 if Config.noTreeAttack then
@@ -9,6 +11,14 @@ if Config.noTreeAttack then
 			table.insert(rock.resistances,{type="physical",percent=100})
 			table.insert(rock.resistances,{type="acid",percent=100})
 			log("Making " .. name .. " immune to biter attack")
+		end
+	end
+end
+
+if Config.keepDeco then
+	for _,cat in pairs(entityCategories) do
+		for name,proto in pairs(data.raw[cat]) do
+			proto.remove_decoratives = "false"
 		end
 	end
 end

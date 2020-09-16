@@ -63,9 +63,10 @@ function onEntityMined(entity, inventory, directList)
 	end
 	if Config.treeSeeds and isTree(entity) and (not isStump(entity)) then
 		local amt = 0
-		if math.random() < 0.5 then
+		local f = Config.saplingRate
+		if math.random() < 0.5*f then
 			amt = math.random(1, 3)
-			if math.random() < 0.8 then
+			if math.random() < 0.8*f then
 				amt = 1
 			end
 		end
@@ -196,22 +197,39 @@ function createRockItems(name_, rock)
   log("Identified biome type '" .. biome .. "'")
   
   local li = {}
-  for i,var in pairs(rock.pictures) do
-  --actual item
-	  local result =
-	  {
-		type = "item",
-		name = name_ .. "-var" .. i,
-		icon = rock.icon,
-		icon_size = rock.icon_size and rock.icon_size or 32,
-		flags = {},
-		subgroup = "trees",
-		order = "a[items]-c[" .. name_ .. "]",
-		place_result = name_,
-		stack_size = 50,
-		localised_name = {"rock-item.name", {"entity-name.rock"}, i, biome}--{"entity-name." .. name_}
-	  }
-	table.insert(li, result)
+	if rock.pictures then
+	  for i,var in pairs(rock.pictures) do
+	  --actual item
+		  local result =
+		  {
+			type = "item",
+			name = name_ .. "-var" .. i,
+			icon = rock.icon,
+			icon_size = rock.icon_size and rock.icon_size or 32,
+			flags = {},
+			subgroup = "trees",
+			order = "a[items]-c[" .. name_ .. "]",
+			place_result = name_,
+			stack_size = 50,
+			localised_name = {"rock-item.name", {"entity-name.rock"}, i, biome}--{"entity-name." .. name_}
+		  }
+		table.insert(li, result)
+	  end
+  else
+		  local result =
+		  {
+			type = "item",
+			name = name_ .. "-var" .. 1,
+			icon = rock.icon,
+			icon_size = rock.icon_size and rock.icon_size or 32,
+			flags = {},
+			subgroup = "trees",
+			order = "a[items]-c[" .. name_ .. "]",
+			place_result = name_,
+			stack_size = 50,
+			localised_name = {"rock-item.name", {"entity-name.rock"}, 1, biome}--{"entity-name." .. name_}
+		  }
+		table.insert(li, result)
   end
 
   log("Created rock item " .. name_)  
@@ -387,11 +405,16 @@ function extinguishFire(entity)
 	end
 end
 
-function controlChunk(surface, area)
+local function repairTreesInChunk(surface, area)
 	local entities = surface.find_entities_filtered{area = area, type = "tree", force = game.forces.neutral}
 	for _,e in pairs(entities) do
 		repairOrReplaceTree(e)
 	end
+end
+
+function controlChunk(surface, area)
+	--repairTreesInChunk(surface, area)
+	surface.map_gen_settings.autoplace_controls.trees.richness = 2
 end
 
 local ranTick = false
@@ -403,7 +426,7 @@ function onTick(tick)
 		ranTick = true
 		local s = game.surfaces["nauvis"]
 		for c in s.get_chunks() do
-			controlChunk(s, c.area)
+			repairTreesInChunk(s, c.area)
 		end
 		game.print("Trees repaired.")
 	end

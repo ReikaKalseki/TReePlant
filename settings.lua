@@ -76,9 +76,16 @@ data:extend({
         },
         {
             type = "bool-setting",
-            name = "replant-decoratives",
+            name = "preserve-decoratives",
             setting_type = "startup",
             default_value = true,
+            order = "r",
+        },
+        {
+            type = "double-setting",
+            name = "sapling-rate",
+            setting_type = "startup",
+            default_value = 1.0,
             order = "r",
         },
 })

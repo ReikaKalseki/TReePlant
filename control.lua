@@ -112,6 +112,16 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 	end
 end)
 
+local function onEntityAttacked(event)	
+	local entity = event.entity
+	local source = event.cause
+	if source and source.valid and source.type == "unit" and event.original_damage_amount > 0 and event.final_damage_amount <= 0 and (isRock(entity) or isTree(entity)) then
+		source.die()
+	end
+end
+
+script.on_event(defines.events.on_entity_damaged, onEntityAttacked)
+
 --[[
 script.on_event(defines.events.on_put_item, function(event)	
 	local player = game.players[event.player_index]
