@@ -5,7 +5,7 @@
   "author": "Reika",
   "contact": "",
   "homepage": "",
-  "factorio_version" : "0.18",
+  "factorio_version" : "1.1",
   "description": "Makes trees replantable from their stumps. Also makes trees healable and easier to protect from damage.",
   "dependencies": ["base", "DragonIndustries"]
 }

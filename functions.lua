@@ -281,7 +281,6 @@ function createTreeSeed(name_, tree)
   {
     type = "item",
     name = name_ .. "-seed",
-    icons = {{icon=tree.icon}, {icon="__TreePlant__/graphics/seed.png"}},
 	icon_size = 32,
     flags = {},
     subgroup = "trees",
@@ -292,6 +291,15 @@ function createTreeSeed(name_, tree)
 	fuel_category = "chemical",
     fuel_value = "400kJ"
   }
+  
+  if tree.icons then
+	result.icons = table.deepcopy(tree.icons)
+	table.insert(result.icons, {icon="__TreePlant__/graphics/seed.png"})
+  elseif tree.icon then
+	result.icons = {{icon=tree.icon}, {icon="__TreePlant__/graphics/seed.png"}}
+  else
+	error("Tree " .. tree.name .. " has no icon of any kind?!")
+  end
 	  
   --log("Created tree seed for " .. name_)
   
