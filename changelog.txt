@@ -1,4 +1,52 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.105.1
+Date: Apr 28 2021
+	- More 1.1 fixes and mod compat
+---------------------------------------------------------------------------------------------------
+Version: 1.102.1
+Date: Mar 27 2021
+	- Update to 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.18.24
+Date: Nov 16 2020
+	- Added sapling drop rate option
+	- Added code to clean up biters stuck forever attacking indestructible trees and rocks
+	- Improved rock handling mod compat
+	- Improved decorative preservation
+---------------------------------------------------------------------------------------------------
+Version: 1.18.12
+Date: Jul 5 2020
+	- Added option to make decoratives replanted around placed entities
+---------------------------------------------------------------------------------------------------
+Version: 1.18.5
+Date: Jun 11 2020
+	- Added missing locale to rock movability setting
+	- Tree repair can now avoid outright replacing trees in many cases
+	- Added internal retrogen capability
+---------------------------------------------------------------------------------------------------
+Version: 1.18.2
+Date: Jun 7 2020
+	- Improved mod compat
+---------------------------------------------------------------------------------------------------
+Version: 1.18.1
+Date: May 29 2020
+	- Update to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 1.17.24
+Date: Sep 30 2019
+	- Tree items are now burnable
+	- Fixed alert sound
+---------------------------------------------------------------------------------------------------
+Version: 1.17.6
+Date: Jun 6 2019
+	- Moved shared code to Dragon Industries
+	- More 0.17 fixes
+	- Updated some sprites
+---------------------------------------------------------------------------------------------------
+Version: 1.17.1
+Date: Mar 23 2019
+	- Update to 0.17
+---------------------------------------------------------------------------------------------------
 Version: 1.0.180
 Date: Nov 28 2018
 	- Fixed command not being accessible the first load of a save
@@ -9,4 +57,77 @@ Date: Sep 18 2018
 	- Fixed tree healing capsule not working
 	- Lengthened stump lifetime again
 	- Added command to find tree stumps: /findStumps
+---------------------------------------------------------------------------------------------------
+Version: 1.0.72
+Date: Jan 30 2018
+	- Fixed some icon size issues with modded trees
+---------------------------------------------------------------------------------------------------
+Version: 1.0.64
+Game: 0.16
+Date: Dec 23 2017
+	- Update to 0.16
+	- Tree repair now preserves color even better
+	- Improved versatility of rock identification
+---------------------------------------------------------------------------------------------------
+Version: 1.0.36
+Date: Aug 17 2017
+	- Fixed crash with cargoless robots
+---------------------------------------------------------------------------------------------------
+Version: 1.0.24
+Game: 0.15
+Date: Aug 17 2017
+	- Tree repair now preserves color and health
+	- Fixed issues with mods adding weird dropless or nameless trees
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Game: 0.15
+Date: Aug 11 2017
+	- Fixed tree planter on some settings combinations
+	- Fixed tree planter being identified as a tree
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Game: 0.15
+Date: Aug 8 2017
+	- Added option for tree healing capsule to repair pollution damage
+	- Added automated tree replanter
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Game: 0.15
+Date: Jul 25 2017
+	- Added tree seeds (saplings) as option to prevent infinite replaceability of trees and thus infinite free wood
+	- Added locale
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Game: 0.15
+Date: Jul 14 2017
+	- Release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Game: 0.15
+Date: Jul 2 2017
+	- Moved options to mod settings system
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Game: 0.15
+Date: Jun 20 2017
+	- Update to 0.15
+	- Added water capsule
+	- Fixed bug with stacking trees on top of each other
+	- Changed "trees drop selves" default from false to true
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Game: 0.14
+Date: Oct 28 2016
+	- Update to 0.14
+	- Added options for big stump hitbox and trees dropping themselves to allow replanting
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Game: 0.12
+Date: Dec 17 2015
+	- Added tree healing capsule
+---------------------------------------------------------------------------------------------------
+Version: 0.0.0
+Game: 0.12
+Date: Dec 13 2015
+	- Creation
 ---------------------------------------------------------------------------------------------------
