@@ -8,7 +8,7 @@ Date: Mar 27 2021
 	- Update to 1.1
 ---------------------------------------------------------------------------------------------------
 Version: 1.18.24
-Date: Nov 16 2020
+Date: Nov 15 2020
 	- Added sapling drop rate option
 	- Added code to clean up biters stuck forever attacking indestructible trees and rocks
 	- Improved rock handling mod compat
@@ -48,6 +48,7 @@ Date: Mar 23 2019
 	- Update to 0.17
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.180
+Game: 0.16
 Date: Nov 28 2018
 	- Fixed command not being accessible the first load of a save
 ---------------------------------------------------------------------------------------------------
@@ -70,12 +71,13 @@ Date: Dec 23 2017
 	- Improved versatility of rock identification
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.36
-Date: Aug 17 2017
+Game: 0.15
+Date: Aug 18 2017
 	- Fixed crash with cargoless robots
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.24
 Game: 0.15
-Date: Aug 17 2017
+Date: Aug 18 2017
 	- Tree repair now preserves color and health
 	- Fixed issues with mods adding weird dropless or nameless trees
 ---------------------------------------------------------------------------------------------------
