@@ -1,6 +1,141 @@
 require("functions")
 require("config")
 
+local function createTreeCapsule(tier)
+	local capsule =
+    {
+    type = "capsule",
+    name = "tree-healing-capsule-" .. tier,
+    icons = {{icon="__TreePlant__/graphics/tree-capsule.png", icon_size = 32}, {icon="__DragonIndustries__/graphics/icons/overlay_" .. tier .. ".png", icon_size = 32}}
+    flags = {},
+    capsule_action =
+    {
+      type = "throw",
+      attack_parameters =
+      {
+        type = "projectile",
+        ammo_category = "capsule",
+        cooldown = 5,
+        projectile_creation_distance = 0.6,
+        range = 40+20*tier,
+        ammo_type =
+        {
+          category = "capsule",
+          target_type = "position",
+          action =
+          {
+            type = "direct",
+            action_delivery =
+            {
+              type = "projectile",
+              projectile = "tree-healing-capsule-" .. tier,
+              starting_speed = 0.3
+            }
+          }
+        }
+      }
+    },
+    subgroup = "capsule",
+    order = "b[tree-healing-capsule-" .. tier .. "]",
+    stack_size = 100
+   }
+	local proj =
+    {
+    type = "projectile",
+    name = "tree-healing-capsule-" .. tier,
+    flags = {"not-on-map"},
+    acceleration = 0.005,
+    action =
+    {
+      type = "direct",
+      action_delivery =
+      {
+        type = "instant",
+        target_effects =
+        {
+          type = "create-entity",
+          entity_name = "tree-healing-cloud-" .. tier,
+		  trigger_created_entity = "true",
+        }
+      }
+    },
+    light = {intensity = 0.5, size = 4+tier},
+    animation =
+    {
+      filename = "__TreePlant__/graphics/tree-capsule.png",
+      frame_count = 1,
+      width = 32,
+      height = 32,
+      priority = "high"
+    },
+    shadow =
+    {
+      filename = "__TreePlant__/graphics/tree-capsule-shadow.png",
+      frame_count = 1,
+      width = 32,
+      height = 32,
+      priority = "high"
+    },
+    smoke = capsule_smoke,
+  }
+  local cloud = {
+    type = "smoke-with-trigger",
+    name = "tree-healing-cloud-" .. tier,
+    flags = {"not-on-map"},
+    show_when_smoke_off = true,
+    animation =
+    {
+      filename = "__base__/graphics/entity/cloud/cloud-45-frames.png",
+      priority = "low",
+      width = 256,
+      height = 256,
+      frame_count = 45,
+      animation_speed = 0.5,
+      line_length = 7,
+      scale = 6,
+    },
+    slow_down_factor = 0,
+    affected_by_wind = false,
+    cyclic = true,
+    duration = 60 * (10+5*tier),
+    fade_away_duration = 2 * 60,
+    spread_duration = 10,
+    color = { r = 0.0, g = 0.6, b = 0.0 },
+    action =
+    {
+      type = "direct",
+      action_delivery =
+      {
+        type = "instant",
+        target_effects =
+        {
+          type = "nested-result",
+          action =
+          {
+            type = "area",
+            radius = 30+15*tier,
+            entity_flags = {"breaths-air"},
+            action_delivery =
+            {
+              type = "instant",
+              target_effects =
+              {
+                type = "damage",
+                damage = { amount = -tier, type = "electric"}
+              }
+            }
+          }
+        }
+      }
+    },
+    action_cooldown = 10 --was 10
+  }
+  return capsule, proj, cloud
+end
+
+local capsule1, proj1, cloud1 = createTreeCapsule(1)
+local capsule2, proj2, cloud2 = createTreeCapsule(2)
+
 data:extend(
 {
     {
