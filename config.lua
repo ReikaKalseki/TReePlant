@@ -22,6 +22,8 @@ Config.treeSeeds = settings.startup["tree-seeds"].value--false
 
 Config.treePollutionRepair = settings.startup["tree-pollution-repair"].value--false
 
+Config.autoTreeRepair = settings.startup["auto-tree-repair"].value--false
+
 Config.movableRocks = settings.startup["movable-rocks"].value--true
 
 Config.keepDeco = settings.startup["preserve-decoratives"].value--true

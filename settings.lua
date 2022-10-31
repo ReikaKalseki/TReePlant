@@ -88,4 +88,12 @@ data:extend({
             default_value = 1.0,
             order = "r",
         },
+        {
+            type = "int-setting",
+            name = "auto-tree-repair",
+            setting_type = "startup",
+            default_value = 2,
+            min_value = 0,
+            order = "r",
+        },
 })

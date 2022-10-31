@@ -50,6 +50,10 @@ function onEntityBuilt(entity, stack)
 		--
 	end
 	addTreePlanter(entity)
+	if entity.name == "tree-repair-order" then
+		entity.surface.create_entity{name = "tree-healing-capsule", force=entity.force, position = entity.position, target=entity, speed=5, max_range=1}
+		entity.destroy()
+	end
 end
 
 function isRock(entity)
@@ -124,7 +128,7 @@ function getAllTreeItems(loaded) --are we in data phase or control phase?
 end
 
 function addTreePlanter(entity)
-	if entity.name == "tree-planter" then
+	if entity.valid and entity.name == "tree-planter" then
 		table.insert(global.treeplant.planters, entity)
 		local i = 1
 		for _,item in pairs(getAllTreeItems(true)) do
@@ -251,8 +255,6 @@ function createTreeItem(name_, tree)
   {
     type = "item",
     name = name_,
-    icon = tree.icon,
-	icon_size = tree.icon_size and tree.icon_size or 32,
     flags = {},
     subgroup = "trees",
     order = "a[items]-c[" .. name_ .. "]",
@@ -261,6 +263,13 @@ function createTreeItem(name_, tree)
 	fuel_category = "chemical",
     fuel_value = "400kJ"
   }
+  
+  if tree.icons then
+	result.icons = table.deepcopy(tree.icons)
+  else
+    result.icon = tree.icon
+	result.icon_size = tree.icon_size and tree.icon_size or 32
+  end
 
   log("Created tree item " .. name_)
   
@@ -379,8 +388,9 @@ function repairOrReplaceTree(entity)
 	return false
 end
 
-function healDamagedTrees(entity)
-	local trees = entity.surface.find_entities_filtered{area = {{entity.position.x-30, entity.position.y-30}, {entity.position.x+30, entity.position.y+30}}, type="tree"}
+function healDamagedTrees(entity, area)
+	if not area then area = {{entity.position.x-30, entity.position.y-30}, {entity.position.x+30, entity.position.y+30}} end
+	local trees = entity.surface.find_entities_filtered{area = area, type="tree"}
 	for k,v in pairs(trees) do
 		--game.print("Corpse " .. k)
 		if isTree(v) then
@@ -420,6 +430,10 @@ local function repairTreesInChunk(surface, area)
 	end
 end
 
+local function scheduleAutomatedTreeRepair(surf, chunk, tree)
+	surf.create_entity{name = "entity-ghost", inner_name="tree-repair-order", force=game.forces.player, position = {chunk.x*32+16, chunk.y*32+16}}
+end
+
 function controlChunk(surface, area)
 	--repairTreesInChunk(surface, area)
 	surface.map_gen_settings.autoplace_controls.trees.richness = 2
@@ -451,8 +465,28 @@ function onTick(tick)
 	end
 
 	if tick%20 == 0 then
+		local surf = game.surfaces["nauvis"]
 		for _,entity in pairs(global.treeplant.planters) do
 			tickTreePlanter(tick, entity)
+		end
+		if Config.autoTreeRepair > 0 and game.forces.player.technologies["construction-robotics"].researched then
+			local chunk = surf.get_random_chunk()
+			local ctr = {chunk.x*32+16, chunk.y*32+16}
+			local poll = surf.get_pollution(ctr)
+			if (poll > 0 or math.random() < 0.25) and #surf.find_logistic_networks_by_construction_area(ctr, game.forces.player) > 0 then
+				local chunkarea = {{chunk.x*32, chunk.y*32}, {chunk.x*32+32, chunk.y*32+32}}
+				local trees = surf.find_entities_filtered({type="tree", area = chunkarea})
+				local count = 0
+				for _,tree in pairs(trees) do
+					if tree.tree_stage_index > 1 or tree.health <= tree.prototype.max_health/5 then
+						count = count+1
+						if count >= Config.autoTreeRepair then
+							scheduleAutomatedTreeRepair(surf, chunk, tree)
+							break
+						end
+					end
+				end
+			end
 		end
 	end
 end

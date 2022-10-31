@@ -144,4 +144,26 @@ data:extend(
     },
     action_cooldown = 10 --was 10
   },
+  {
+    type = "simple-entity-with-force",
+    name = "tree-repair-order",
+    icon = "__core__/graphics/empty.png",
+	icon_size = 1,
+    flags = {"placeable-player", "player-creation", "not-on-map", "placeable-off-grid"},
+    selectable_in_game = false,
+	destructible = false,
+	collision_mask = {},
+	order = "z",
+    render_layer = "object",
+    pictures =
+    {
+      filename = "__core__/graphics/empty.png",
+      width = 1,
+      height = 1,
+      frame_count = 1,
+      line_length = 1,
+      animation_speed = 1,
+    },
+    placeable_by = {item = "tree-healing-capsule", count = 1},
+  },
 })
