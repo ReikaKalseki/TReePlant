@@ -93,7 +93,7 @@ data:extend({
             name = "auto-tree-repair",
             setting_type = "startup",
             default_value = 2,
-            min_value = 0,
+            minimum_value = 0,
             order = "r",
         },
 })

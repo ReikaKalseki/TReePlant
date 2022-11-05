@@ -3,7 +3,14 @@ require "functions"
 
 local items = getAllTreeItems(false)
 
-if #items == 0 then return end
+local size = getTableSize(items)
+
+if size == 0 then
+	log("ERROR: Found no sapling items!")
+	return
+else
+	log("Found " .. size .. " sapling items")
+end
 
 data:extend({
   {
@@ -44,7 +51,7 @@ data:extend({
     },
     fast_replaceable_group = "container",
     inventory_size = 80,
-	logistic_slots_count = #items,
+	max_logistic_slots = size,
     logistic_mode = "requester",
     open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
     close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },

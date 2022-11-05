@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.148.1
+Date: Oct 31 2022
+	- Added (optional) automated deployment of tree healing capsules with construction robots
+---------------------------------------------------------------------------------------------------
+Version: 1.144.1
+Date: Oct 7 2022
+	- Added missing locale to sapling drop rate setting
+---------------------------------------------------------------------------------------------------
 Version: 1.105.1
 Date: Apr 28 2021
 	- More 1.1 fixes and mod compat

@@ -52,6 +52,21 @@ data:extend(
     },
     result = "tree-healing-capsule",
   },
+     {
+    type = "recipe",
+    name = "tree-healing-capsule-improved",
+    enabled = "true",
+	category = "crafting-with-fluid",
+    energy_required = 3,
+    ingredients =
+    {
+		{type = "item", name = "wood", amount=4},
+		{type = "item", name = "coal", amount=2},
+		{type = "fluid", name = "water", amount=50},
+    },
+    result = "tree-healing-capsule",
+	result_count = 3,
+  },
    
    
     {
@@ -165,5 +180,6 @@ data:extend(
       animation_speed = 1,
     },
     placeable_by = {item = "tree-healing-capsule", count = 1},
+	build_sound = { filename = "__base__/sound/item-close.ogg", volume=0.25 },
   },
 })

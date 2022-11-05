@@ -131,8 +131,8 @@ function addTreePlanter(entity)
 	if entity.valid and entity.name == "tree-planter" then
 		table.insert(global.treeplant.planters, entity)
 		local i = 1
-		for _,item in pairs(getAllTreeItems(true)) do
-			if i > entity.request_slot_count then break end
+		local items = getAllTreeItems(true)
+		for _,item in pairs(items) do
 			entity.set_request_slot({name=item.name, count=1000000}, i)
 			i = i+1
 		end

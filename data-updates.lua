@@ -1,10 +1,19 @@
 require("functions")
 require("config")
 
+require "__DragonIndustries__.recipe"
+
 if data.raw.item["rubber"] then
-	table.insert(data.raw["recipe"]["water-capsule"].ingredients,{"rubber", 2})
+	addItemToRecipe("water-capsule", "rubber", 2)
 elseif data.raw.item["bob-rubber"] then
-	table.insert(data.raw["recipe"]["water-capsule"].ingredients,{"bob-rubber", 2})
+	addItemToRecipe("water-capsule", "bob-rubber", 2)
+end
+
+if data.raw.item["fertiliser"] then
+	addItemToRecipe("tree-healing-capsule-improved", "fertiliser", 1)
+	data.raw.recipe["tree-healing-capsule-improved"].energy_required = 2.5
+	replaceItemInRecipe("tree-healing-capsule-improved", "fertiliser", "fertiliser", 0.5)
+	data.raw.recipe["tree-healing-capsule-improved"].result_count = 4
 end
 
 if Config.placeableTrees then
