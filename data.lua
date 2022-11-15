@@ -11,7 +11,7 @@ data:extend({
 	icon = "__TreePlant__/graphics/alert.png",
 	icon_size = 64,
 	subgroup = "virtual-signal-special",
-	order = name,
+	order = "tree-stump-alert",
 	hidden = true,
 },
 })

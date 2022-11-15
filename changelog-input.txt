@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.152.1
+Date: Nov 15 2022
+	- Fixed tree planting machine logistic requests
+	- Major code cleanup
+---------------------------------------------------------------------------------------------------
+Version: 1.150.1
+Date: Nov 4 2022
+	- Fixed minimum zero value of tree-repair setting not applying
+	- Added a more advanced but efficient alternate recipe for tree healing capsules
+	- Fixed automatic tree capsule deploy sound
+---------------------------------------------------------------------------------------------------
 Version: 1.148.1
 Date: Oct 31 2022
 	- Added (optional) automated deployment of tree healing capsules with construction robots
@@ -80,7 +91,7 @@ Date: Dec 23 2017
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.36
 Game: 0.15
-Date: Aug 18 2017
+Date: Aug 23 2017
 	- Fixed crash with cargoless robots
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.24

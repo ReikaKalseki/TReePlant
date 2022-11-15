@@ -48,7 +48,7 @@ script.on_init(function()
 	initGlobal(true)
 end)
 
-script.on_configuration_changed(function()
+script.on_configuration_changed(function(data)
 	initGlobal(true)
 end)
 
